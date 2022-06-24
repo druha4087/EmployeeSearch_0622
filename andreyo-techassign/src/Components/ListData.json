@@ -1,0 +1,46 @@
+[{
+    "id": 1,
+    "f_name": "Margo",
+    "l_name": "Coleman",
+    "dob": "12/02/1996",
+    "empl_id": "01",
+    "salary": "R102,000",
+    "role": "Manager",
+    "report_line": ""
+}, {
+    "id": 2,
+    "f_name": "Sarah",
+    "l_name": "Wilson",
+    "dob": "09/05/2000",
+    "empl_id": "02",
+    "salary": "R87,600",
+    "role": "Manager",
+    "report_line": ""
+}, {
+    "id": 3,
+    "f_name": "Gabriel",
+    "l_name": "Sanchez",
+    "dob": "27/10/1999",
+    "empl_id": "03",
+    "salary": "R66,000",
+    "role": "Employee",
+    "report_line": ""
+}, {
+    "id": 4,
+    "f_name": "Anya",
+    "l_name": "Bridgers",
+    "dob": "01/08/1998",
+    "empl_id": "04",
+    "salary": "R70,000",
+    "role": "Employee",
+    "report_line": ""
+}, {
+    "id": 5,
+    "f_name": "Billy",
+    "l_name": "Summers",
+    "dob": "19/11/1995",
+    "empl_id": "11",
+    "salary": "R35,000",
+    "role": "Trainee",
+    "report_line": ""
+}] 
