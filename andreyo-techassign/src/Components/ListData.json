@@ -4,7 +4,7 @@
     "f_name": "Margo",
     "l_name": "Coleman",
     "dob": "12/02/1996",
-    "salary": "R102,000",
+    "salary": 102000,
     "role": "Manager",
     "report_line": ["E03"]
 }, {
@@ -13,7 +13,7 @@
     "f_name": "Sarah",
     "l_name": "Wilson",
     "dob": "09/05/2000",
-    "salary": "R87,600",
+    "salary": 87600,
     "role": "Manager",
     "report_line": ["E04"]
 }, {
@@ -22,7 +22,7 @@
     "f_name": "Gabriel",
     "l_name": "Sanchez",
     "dob": "27/10/1999",
-    "salary": "R66,000",
+    "salary": 66000,
     "role": "Employee",
     "report_line": ["T11"]
 }, {
@@ -31,7 +31,7 @@
     "f_name": "Anya",
     "l_name": "Bridgers",
     "dob": "01/08/1998",
-    "salary": "R70,000",
+    "salary": 70000,
     "role": "Employee",
     "report_line": []
 }, {
@@ -40,7 +40,7 @@
     "f_name": "Billy",
     "l_name": "Summers",
     "dob": "19/11/1995",
-    "salary": "R35,000",
+    "salary": 35000,
     "role": "Trainee",
     "report_line": []
 }] 

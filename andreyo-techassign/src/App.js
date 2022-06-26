@@ -1,5 +1,5 @@
-import { React, useState } from "react";
-import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card, Chip, Stack } from '@mui/material';
+import { React, useState, Component } from "react";
+import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card, Chip, Stack, MenuItem } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -77,7 +77,6 @@ function App() {
   /*
   -------HOOKS--------
   */
-
   const [inputText, setInputText] = useState("");
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -88,8 +87,58 @@ function App() {
     l_name: true,
     role: formats,
     dob: false, //add date picker
-    salary: false //add scale selector
   });
+  const [salary, setSalary] = useState('');
+
+  const handleChange = (e) => {
+    setSalary(e.target.value);
+  };
+
+  //CLASSES
+
+  class SalarySelect extends Component {
+    constructor() {
+      super();
+      this.state = {
+          showHideSalary: state.salary,
+      };
+      this.hideComponent = this.hideComponent.bind(this);
+    }
+  
+    hideComponent() {
+          this.setState({ showHideSalary: !this.state.showHideSalary });
+    }
+  
+    render() {
+      const { showHideSalary } = this.state;
+      return (
+        <div height="400px">  
+        <FormControlLabel
+            control={<Switch checked={state.salary} onChange={filterToggle} name="salary" />}
+            label="Salary" />
+        {showHideSalary && (
+          <Box>
+            <TextField
+                id="min-salary-select"
+                value={salary}
+                label="Min. Salary"
+                select
+                fullWidth
+                onChange={handleChange}
+                size="small"
+              >
+                <MenuItem value={25000}>R25,000</MenuItem>
+                <MenuItem value={50000}>R50,000</MenuItem>
+                <MenuItem value={75000}>R75,000</MenuItem>
+                <MenuItem value={100000}>R100,000</MenuItem>
+                <MenuItem value={125000}>R125,000</MenuItem>
+              </TextField>
+          </Box>
+          )}
+        </div>
+      );
+    }
+  }
 
   /*
   ------FUNCTIONS------
@@ -144,11 +193,9 @@ function App() {
                   <FormControlLabel
                     control={<Switch checked={state.l_name} onChange={filterToggle} name="l_name" />}
                     label="Last Name" />
+                  <SalarySelect/>
                 </FormGroup>
-                <FormControlLabel
-                    control={<Switch checked={state.dob} onChange={filterToggle} name="dob" />}
-                    label="Birthdate" />
-                <Button variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
+                <Button style={{margin: "10px"}} variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
               </FormControl>
             </Box>
           </Modal>
@@ -171,10 +218,10 @@ function App() {
             const entries = Object.entries(data);
             checkRole(entries);
 
-            if (state.f_name === true && checkRole(entries) === true){
+            if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
               results = results || data.f_name.toLowerCase().includes(props.input);
             }
-            if (state.l_name === true && checkRole(entries) === true)
+            if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
             {
               results = results || data.l_name.toLowerCase().includes(props.input);
             }
@@ -189,7 +236,7 @@ function App() {
                     <Chip label={item.role} color="secondary"/>
                     <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
                     <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
-                    <Chip icon={<AttachMoneyIcon />} label={item.salary} color="error" variant="outlined"/>
+                    <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
                   </Stack>
                 </li>
             ))}
