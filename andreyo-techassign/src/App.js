@@ -184,7 +184,7 @@ function App() {
     return (
         <ul>
             {filteredData.map((item) => (
-                <li key={item.empl_id}>
+                <li key={item.id}>
                   <Stack direction="row" spacing={1}>
                     <Chip label={item.role} color="secondary"/>
                     <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
