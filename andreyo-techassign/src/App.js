@@ -1,6 +1,10 @@
 import { React, useState } from "react";
-import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card } from '@mui/material';
+import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card, Chip, Stack } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from "./Components/ListData.json"
 import "./App.css";
@@ -18,7 +22,7 @@ function App() {
         main: '#b9fbc0',
       },
       secondary: {
-        main: '#fffded',
+        main: '#4a5e6d',
       },
     },
   });
@@ -63,7 +67,7 @@ function App() {
     data.role = newFormats
   };
 
-  const nameToggle = (e) => {
+  const filterToggle = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.checked,
@@ -84,7 +88,6 @@ function App() {
     l_name: true,
     role: formats,
     dob: false, //add date picker
-    empl_id: false,
     salary: false //add scale selector
   });
 
@@ -106,7 +109,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="wrapper">
         <div className="search">
-          <Card className="card" style={{backgroundColor: "#4a5e6d"}}>
+          <Card className="card" style={{backgroundColor: "#4a5e6d", width: 400}}>
             <h1>Employee Search</h1>
               <TextField onChange={inputHandler} variant="outlined" fullWidth label="Search" color="primary"/>
 
@@ -123,6 +126,9 @@ function App() {
                 <ToggleButton sx={buttonStyle} color="primary" id="trainee-toggle" value="Trainee" aria-label="Trainee">
                   Trainee
                 </ToggleButton>
+                <Tooltip title="Hierarchy" arrow>
+                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><AccountTreeIcon>Filter</AccountTreeIcon></Button>
+                </Tooltip>
               </ToggleButtonGroup>
           </Card>
         
@@ -133,12 +139,15 @@ function App() {
                 <Typography variant="h6" component="h2" color="#b9fbc0">Search By Filter</Typography>
                 <FormGroup>
                   <FormControlLabel
-                    control={<Switch checked={state.f_name} onChange={nameToggle} name="f_name" />}
+                    control={<Switch checked={state.f_name} onChange={filterToggle} name="f_name" />}
                     label="First Name" />
                   <FormControlLabel
-                    control={<Switch checked={state.l_name} onChange={nameToggle} name="l_name" />}
+                    control={<Switch checked={state.l_name} onChange={filterToggle} name="l_name" />}
                     label="Last Name" />
                 </FormGroup>
+                <FormControlLabel
+                    control={<Switch checked={state.dob} onChange={filterToggle} name="dob" />}
+                    label="Birthdate" />
                 <Button variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
               </FormControl>
             </Box>
@@ -161,8 +170,6 @@ function App() {
 
             const entries = Object.entries(data);
             checkRole(entries);
-            console.log(entries[6][1] +"-"+ formats[0])
-            
 
             if (state.f_name === true && checkRole(entries) === true){
               results = results || data.f_name.toLowerCase().includes(props.input);
@@ -177,7 +184,14 @@ function App() {
     return (
         <ul>
             {filteredData.map((item) => (
-                <li key={item.id}>{item.role}: {item.empl_id} - {item.f_name} {item.l_name} ({item.dob}), {item.salary}</li>
+                <li key={item.empl_id}>
+                  <Stack direction="row" spacing={1}>
+                    <Chip label={item.role} color="secondary"/>
+                    <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
+                    <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
+                    <Chip icon={<AttachMoneyIcon />} label={item.salary} color="error" variant="outlined"/>
+                  </Stack>
+                </li>
             ))}
         </ul>
     )

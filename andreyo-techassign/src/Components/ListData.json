@@ -1,46 +1,41 @@
 [{
-    "id": 1,
+    "empl_id": "M01",
     "f_name": "Margo",
     "l_name": "Coleman",
     "dob": "12/02/1996",
-    "empl_id": "01",
     "salary": "R102,000",
     "role": "Manager",
-    "report_line": ""
+    "report_line": ["E03"]
 }, {
-    "id": 2,
+    "empl_id": "M02",
     "f_name": "Sarah",
     "l_name": "Wilson",
     "dob": "09/05/2000",
-    "empl_id": "02",
     "salary": "R87,600",
     "role": "Manager",
-    "report_line": ""
+    "report_line": ["E04"]
 }, {
-    "id": 3,
+    "empl_id": "E03",
     "f_name": "Gabriel",
     "l_name": "Sanchez",
     "dob": "27/10/1999",
-    "empl_id": "03",
     "salary": "R66,000",
     "role": "Employee",
-    "report_line": ""
+    "report_line": ["T11"]
 }, {
-    "id": 4,
+    "empl_id": "E04",
     "f_name": "Anya",
     "l_name": "Bridgers",
     "dob": "01/08/1998",
-    "empl_id": "04",
     "salary": "R70,000",
     "role": "Employee",
-    "report_line": ""
+    "report_line": []
 }, {
-    "id": 5,
+    "empl_id": "T11",
     "f_name": "Billy",
     "l_name": "Summers",
     "dob": "19/11/1995",
-    "empl_id": "11",
     "salary": "R35,000",
     "role": "Trainee",
-    "report_line": ""
+    "report_line": []
 }] 
