@@ -18,7 +18,7 @@ function App() {
   --------STYLES---------
   */
 
-
+  //General color theme
   const theme = createTheme({
     palette: {
       primary: {
@@ -30,6 +30,7 @@ function App() {
     },
   });
 
+  //Styling of filter modal
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -43,6 +44,7 @@ function App() {
     p: 4,
   };
 
+  //Styling of role filter toggle group
   const groupStyle = {
     borderRadius: 1,
     height: 30,
@@ -50,6 +52,7 @@ function App() {
     mt: 0.3,
   };
 
+  //Styling of role filter toggle buttons
   const buttonStyle = {
     borderRadius: 1,
     height: 30,
@@ -60,16 +63,19 @@ function App() {
   ------EVENT HANDLERS------
   */
 
+  //Handles change in search bar input
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
 
-  const roleToggle = (e, newFormats) => {
-    setFormats(newFormats);
-    data.role = newFormats
+  //Handles change in role filter toggles
+  const roleToggle = (e, newRoles) => {
+    setRoles(newRoles);
+    data.role = newRoles;
   };
 
+  //Handles change in search criteria toggles
   const filterToggle = (e) => {
     setState({
       ...state,
@@ -77,6 +83,7 @@ function App() {
     });
   };
 
+  //Handles change in salary filter state
   const salaryChange = (e) => {
     setSalary(e.target.value);
   };
@@ -84,22 +91,39 @@ function App() {
   /*
   -------HOOKS--------
   */
+
+  //Hook for search bar input text 
   const [inputText, setInputText] = useState("");
+
+  //Hook for state of modal
   const [open, setOpen] = useState(false);
+
+  //Hooks for opening and closing modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [formats, setFormats] = useState(() => ['Manager', 'Employee', 'Trainee']);
+
+  //Hook for role filters
+  const [roles, setRoles] = useState(() => ['Manager', 'Employee', 'Trainee']);
+
+  //Hook for search criteria filters
   const [state, setState] = useState({
     f_name: true,
     l_name: true,
-    role: formats
+    role: roles
   });
+
+  //Hook for salary filter
   const [salary, setSalary] = useState('');
-  const [dob, setDOB] = useState(null);
+
+  //Hook for birthdate filter
+  const [dob, setDOB] = useState(new Date());
 
 
-  //CLASSES
+  /*
+  ------CLASSES-------
+  */
 
+  //Class that handles salary filter component
   class SalarySelect extends Component {
     constructor() {
       super();
@@ -144,6 +168,7 @@ function App() {
     }
   }
 
+  //Class that handles date filter component
   class DateSelect extends Component {
     constructor() {
       super();
@@ -166,18 +191,19 @@ function App() {
             label="Birthdate" />
         {showHideDate && (
           <Box>
+            {/* TO-DO: Bug with Textfield doesn't allow for typing date following backspace being pressed */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DesktopDatePicker
-              label="D.O.B. Before"
-              inputFormat="DD/MM/YYYY"
-              value={dob}
-              color="primary"
-              onChange={(newDate) => {setDOB(newDate);}}
-              renderInput={(params) => <TextField {...params} 
-              sx={{
-                svg: { color: '#b9fbc0' },
-              }} />}
-            />
+              <DesktopDatePicker
+                label="D.O.B. Before"
+                inputFormat="DD/MM/YYYY"
+                value={dob}
+                color="primary"
+                onChange={(newDate) => {setDOB(newDate);}}
+                renderInput={(params) => <TextField {...params} 
+                sx={{
+                  svg: { color: '#b9fbc0' },
+                }} />}
+              />
             </LocalizationProvider>
           </Box>
           )}
@@ -190,16 +216,18 @@ function App() {
   ------FUNCTIONS------
   */
 
+  //Checks whether role of employee matches current role filter
   function checkRole(entries){
     var pass = false;
-    for (let i = 0; i < formats.length; i++) {
-      if (entries[6][1] === formats[i]) {
+    for (let i = 0; i < roles.length; i++) {
+      if (entries[6][1] === roles[i]) {
         pass = true;
       }
     }
     return pass;
   }
 
+  //Checks whether birthdate of employee predates current DOB filter
   function checkDate(entries){
     var date = new Date(entries[4][1]);
     if (date < dob.$d) {
@@ -211,15 +239,17 @@ function App() {
     }
   }
 
+  //Main output of application
   return (
     <ThemeProvider theme={theme}>
       <div className="wrapper">
         <div className="search">
           <Card className="card" style={{backgroundColor: "#4a5e6d", width: 400}}>
             <h1>Employee Search</h1>
+              {/* Search bar */}
               <TextField onChange={inputHandler} variant="outlined" fullWidth label="Search" color="primary"/>
-
-              <ToggleButtonGroup sx={groupStyle} value={formats} onChange={roleToggle} aria-label="text formatting">
+              {/* Filter Toggle Group */}
+              <ToggleButtonGroup sx={groupStyle} value={roles} onChange={roleToggle} aria-label="text formatting">
                 <Tooltip title="Filter" arrow>
                   <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><FilterListIcon>Filter</FilterListIcon></Button>
                 </Tooltip>
@@ -235,19 +265,23 @@ function App() {
               </ToggleButtonGroup>
           </Card>
         
-
+          {/* Filter Modal */}
           <Modal open={open} onClose={handleClose} aria-labelledby="title" aria-describedby="description">
             <Box sx={modalStyle} style={{backgroundColor: "#4a5e6d"}}>
               <FormControl component="fieldset" variant="standard">
                 <Typography variant="h6" component="h2" color="#b9fbc0">Search By Filter</Typography>
                 <FormGroup>
+                  {/* First Name Filter Toggle */}
                   <FormControlLabel
                     control={<Switch checked={state.f_name} onChange={filterToggle} name="f_name" />}
                     label="First Name" />
+                  {/* Last Name Filter Toggle */}
                   <FormControlLabel
                     control={<Switch checked={state.l_name} onChange={filterToggle} name="l_name" />}
                     label="Last Name" />
+                  {/* Salary Filter Toggle */}
                   <SalarySelect/>
+                  {/* Birthdate Filter Toggle */}
                   <DateSelect/>
                 </FormGroup>
                 <Button style={{margin: "10px"}} variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
@@ -256,12 +290,14 @@ function App() {
           </Modal>
 
         </div>
+        {/* Output List based on search criteria */}
         <List input={inputText} />
 
       </div>
     </ThemeProvider>
   );
 
+  //Checks for all filters before outputting filtered data 
   function List(props) {
     const filteredData = data.filter((data) => {
         if (props.input === '') {
@@ -272,7 +308,8 @@ function App() {
 
             const entries = Object.entries(data);
             checkRole(entries);
-
+            //Checks for first and last name filter present within each Filter Check
+            //Salary Filter Check
             if(state.salary === true){
               if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
                 results = results || data.f_name.toLowerCase().includes(props.input);
@@ -282,6 +319,7 @@ function App() {
                 results = results || data.l_name.toLowerCase().includes(props.input);
               }
             }
+            //DOB Filter Check
             else if(state.dob === true){
               if (state.f_name === true && checkRole(entries) === true && checkDate(entries)){
                 results = results || data.f_name.toLowerCase().includes(props.input);
@@ -291,6 +329,7 @@ function App() {
                 results = results || data.l_name.toLowerCase().includes(props.input);
               }
             }
+            //Default
             else{
               if (state.f_name === true && checkRole(entries) === true){
                 results = results || data.f_name.toLowerCase().includes(props.input);
