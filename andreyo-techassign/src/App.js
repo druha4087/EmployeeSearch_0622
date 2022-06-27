@@ -234,7 +234,6 @@ function App() {
       return true
     }
     else{
-      console.log("false")
       return false
     }
   }
@@ -243,7 +242,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="wrapper">
-        <div className="search">
           <Card className="card" style={{backgroundColor: "#4a5e6d", width: 400}}>
             <h1>Employee Search</h1>
               {/* Search bar */}
@@ -251,7 +249,7 @@ function App() {
               {/* Filter Toggle Group */}
               <ToggleButtonGroup sx={groupStyle} value={roles} onChange={roleToggle} aria-label="text formatting">
                 <Tooltip title="Filter" arrow>
-                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><FilterListIcon>Filter</FilterListIcon></Button>
+                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><FilterListIcon/></Button>
                 </Tooltip>
                 <ToggleButton sx={buttonStyle} color="primary" id="manager-toggle" value="Manager" aria-label="Manager">
                   Manager
@@ -289,7 +287,6 @@ function App() {
             </Box>
           </Modal>
 
-        </div>
         {/* Output List based on search criteria */}
         <List input={inputText} />
 
