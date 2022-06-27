@@ -3,7 +3,7 @@
     "empl_id": "M01",
     "f_name": "Margo",
     "l_name": "Coleman",
-    "dob": "12/02/1996",
+    "dob": "1996-02-12",
     "salary": 102000,
     "role": "Manager",
     "report_line": ["E03"]
@@ -12,7 +12,7 @@
     "empl_id": "M02",
     "f_name": "Sarah",
     "l_name": "Wilson",
-    "dob": "09/05/2000",
+    "dob": "2000-05-09",
     "salary": 87600,
     "role": "Manager",
     "report_line": ["E04"]
@@ -21,7 +21,7 @@
     "empl_id": "E03",
     "f_name": "Gabriel",
     "l_name": "Sanchez",
-    "dob": "27/10/1999",
+    "dob": "1999-10-27",
     "salary": 66000,
     "role": "Employee",
     "report_line": ["T11"]
@@ -30,7 +30,7 @@
     "empl_id": "E04",
     "f_name": "Anya",
     "l_name": "Bridgers",
-    "dob": "01/08/1998",
+    "dob": "1998-08-01",
     "salary": 70000,
     "role": "Employee",
     "report_line": []
@@ -39,7 +39,7 @@
     "empl_id": "T11",
     "f_name": "Billy",
     "l_name": "Summers",
-    "dob": "19/11/1995",
+    "dob": "1995-11-19",
     "salary": 35000,
     "role": "Trainee",
     "report_line": []

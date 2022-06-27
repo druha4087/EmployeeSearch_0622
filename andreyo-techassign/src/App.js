@@ -5,6 +5,9 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from "./Components/ListData.json"
 import "./App.css";
@@ -74,6 +77,10 @@ function App() {
     });
   };
 
+  const salaryChange = (e) => {
+    setSalary(e.target.value);
+  };
+
   /*
   -------HOOKS--------
   */
@@ -85,14 +92,11 @@ function App() {
   const [state, setState] = useState({
     f_name: true,
     l_name: true,
-    role: formats,
-    dob: false, //add date picker
+    role: formats
   });
   const [salary, setSalary] = useState('');
+  const [dob, setDOB] = useState(null);
 
-  const handleChange = (e) => {
-    setSalary(e.target.value);
-  };
 
   //CLASSES
 
@@ -124,7 +128,7 @@ function App() {
                 label="Min. Salary"
                 select
                 fullWidth
-                onChange={handleChange}
+                onChange={salaryChange}
                 size="small"
               >
                 <MenuItem value={25000}>R25,000</MenuItem>
@@ -133,6 +137,48 @@ function App() {
                 <MenuItem value={100000}>R100,000</MenuItem>
                 <MenuItem value={125000}>R125,000</MenuItem>
               </TextField>
+          </Box>
+          )}
+        </div>
+      );
+    }
+  }
+
+  class DateSelect extends Component {
+    constructor() {
+      super();
+      this.state = {
+          showHideDate: state.dob,
+      };
+      this.hideComponent = this.hideComponent.bind(this);
+    }
+  
+    hideComponent() {
+          this.setState({ showHideDate: !this.state.showHideDate });
+    }
+    
+    render() {
+      const { showHideDate } = this.state;
+      return (
+        <div height="400px">  
+        <FormControlLabel
+            control={<Switch checked={state.dob} onChange={filterToggle} name="dob" />}
+            label="Birthdate" />
+        {showHideDate && (
+          <Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DesktopDatePicker
+              label="D.O.B. Before"
+              inputFormat="DD/MM/YYYY"
+              value={dob}
+              color="primary"
+              onChange={(newDate) => {setDOB(newDate);}}
+              renderInput={(params) => <TextField {...params} 
+              sx={{
+                svg: { color: '#b9fbc0' },
+              }} />}
+            />
+            </LocalizationProvider>
           </Box>
           )}
         </div>
@@ -152,6 +198,17 @@ function App() {
       }
     }
     return pass;
+  }
+
+  function checkDate(entries){
+    var date = new Date(entries[4][1]);
+    if (date < dob.$d) {
+      return true
+    }
+    else{
+      console.log("false")
+      return false
+    }
   }
 
   return (
@@ -175,9 +232,6 @@ function App() {
                 <ToggleButton sx={buttonStyle} color="primary" id="trainee-toggle" value="Trainee" aria-label="Trainee">
                   Trainee
                 </ToggleButton>
-                <Tooltip title="Hierarchy" arrow>
-                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><AccountTreeIcon>Filter</AccountTreeIcon></Button>
-                </Tooltip>
               </ToggleButtonGroup>
           </Card>
         
@@ -194,6 +248,7 @@ function App() {
                     control={<Switch checked={state.l_name} onChange={filterToggle} name="l_name" />}
                     label="Last Name" />
                   <SalarySelect/>
+                  <DateSelect/>
                 </FormGroup>
                 <Button style={{margin: "10px"}} variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
               </FormControl>
@@ -223,6 +278,15 @@ function App() {
                 results = results || data.f_name.toLowerCase().includes(props.input);
               }
               if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
+            }
+            else if(state.dob === true){
+              if (state.f_name === true && checkRole(entries) === true && checkDate(entries)){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true && checkDate(entries))
               {
                 results = results || data.l_name.toLowerCase().includes(props.input);
               }
