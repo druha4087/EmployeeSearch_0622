@@ -218,12 +218,23 @@ function App() {
             const entries = Object.entries(data);
             checkRole(entries);
 
-            if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
-              results = results || data.f_name.toLowerCase().includes(props.input);
+            if(state.salary === true){
+              if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
             }
-            if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
-            {
-              results = results || data.l_name.toLowerCase().includes(props.input);
+            else{
+              if (state.f_name === true && checkRole(entries) === true){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true)
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
             }
             return results;
         }
