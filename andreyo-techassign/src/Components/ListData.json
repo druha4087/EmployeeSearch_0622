@@ -1,12 +1,12 @@
 [{
     "id":1,
     "empl_id": "M01",
-    "f_name": "Margo",
-    "l_name": "Coleman",
+    "f_name": "Monwabisi",
+    "l_name": "Musachi",
     "dob": "1996-02-12",
     "salary": 102000,
     "role": "Manager",
-    "report_line": ["E03"]
+    "report_line": ["E03", "E05"]
 },
 {
     "id":2,
@@ -34,14 +34,60 @@
     "dob": "1999-10-27",
     "salary": 66000,
     "role": "Employee",
-    "report_line": ["T11"]
+    "report_line": ["T01"]
 }, {
     "id":5,
-    "empl_id": "T11",
+    "empl_id": "T01",
     "f_name": "Billy",
     "l_name": "Summers",
-    "dob": "1995-11-19",
+    "dob": "1999-07-23",
     "salary": 35000,
     "role": "Trainee",
     "report_line": []
-}] 
+}, {
+    "id":6,
+    "empl_id": "T02",
+    "f_name": "Jane",
+    "l_name": "Suarez",
+    "dob": "2001-09-21",
+    "salary": 37000,
+    "role": "Trainee",
+    "report_line": []
+}, {
+    "id":7,
+    "empl_id": "T03",
+    "f_name": "Nathan",
+    "l_name": "Dane",
+    "dob": "2000-08-08",
+    "salary": 38500,
+    "role": "Trainee",
+    "report_line": []
+}, {
+    "id":8,
+    "empl_id": "E05",
+    "f_name": "Emeka",
+    "l_name": "Sigudla",
+    "dob": "1996-11-01",
+    "salary": 71000,
+    "role": "Employee",
+    "report_line": ["T02"]
+}, {
+    "id":9,
+    "empl_id": "E01",
+    "f_name": "Alex",
+    "l_name": "Mabaso",
+    "dob": "1997-04-11",
+    "salary": 69900,
+    "role": "Employee",
+    "report_line": ["T03"]
+}, {
+    "id":10,
+    "empl_id": "M03",
+    "f_name": "Margo",
+    "l_name": "Coleman",
+    "dob": "1995-11-19",
+    "salary": 98700,
+    "role": "Manager",
+    "report_line": ["E01"]
+}
+] 

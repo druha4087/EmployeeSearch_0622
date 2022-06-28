@@ -1,7 +1,6 @@
 import { React, useState, Component } from "react";
 import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card, Chip, Stack, MenuItem } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -194,7 +193,7 @@ function App() {
             {/* TO-DO: Bug with Textfield doesn't allow for typing date following backspace being pressed */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                label="D.O.B. Before"
+                label="D.O.B. After"
                 inputFormat="DD/MM/YYYY"
                 value={dob}
                 color="primary"
@@ -230,7 +229,7 @@ function App() {
   //Checks whether birthdate of employee predates current DOB filter
   function checkDate(entries){
     var date = new Date(entries[4][1]);
-    if (date < dob.$d) {
+    if (date > dob.$d) {
       return true
     }
     else{
