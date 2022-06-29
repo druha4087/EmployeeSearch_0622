@@ -193,7 +193,7 @@ function App() {
             {/* TO-DO: Bug with Textfield doesn't allow for typing date following backspace being pressed */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                label="D.O.B. After"
+                label="D.O.B. Before"
                 inputFormat="DD/MM/YYYY"
                 value={dob}
                 color="primary"
@@ -229,7 +229,7 @@ function App() {
   //Checks whether birthdate of employee predates current DOB filter
   function checkDate(entries){
     var date = new Date(entries[4][1]);
-    if (date > dob.$d) {
+    if (date < dob.$d) {
       return true
     }
     else{
