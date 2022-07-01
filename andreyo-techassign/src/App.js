@@ -238,6 +238,144 @@ function App() {
     }
   }
 
+  //Retrieves top earners per role
+  //Note: this solution relies on the assumption that each role earns less than their superior role and more than their subordinate role 
+  //(eg. employees earn less than managers and more than trainees)
+  function getTopSalaries(entries){
+    let top = [];
+    let manArr = [];
+    let empArr = [];
+    let trainArr = [];
+
+    for (let j = 0; j < entries.length; j++) {
+      if (entries[j].role !== 'Earnings') {
+        if (entries[j].role.includes('Manager')){
+          manArr.push(entries[j]);
+        }
+        if (entries[j].role.includes('Employee')){
+          empArr.push(entries[j]);
+        }
+        if (entries[j].role.includes('Trainee')){
+          trainArr.push(entries[j]);
+        }
+      }
+    }
+
+    manArr.sort((a,b) => b.salary - a.salary);
+    empArr.sort((a,b) => b.salary - a.salary);
+    trainArr.sort((a,b) => b.salary - a.salary);
+
+    if(manArr.length){
+      top.push(manArr[0].salary);
+    }
+    if(empArr.length){
+      top.push(empArr[0].salary);
+    }
+    if(trainArr.length){
+      top.push(trainArr[0].salary);
+    }
+
+    return top;
+  }
+
+  
+  //Checks for all filters before outputting filtered data 
+  function List(props) {
+    const filteredData = data.filter((data) => {
+        //No search bar input
+        if (props.input === '') {
+          var defaultOut;
+          const entries = Object.entries(data);
+          if(checkRole(entries)){
+            defaultOut = data.f_name.toLowerCase().includes(props.input);
+          }
+          return defaultOut;
+        }
+        //Once search bar receives input
+        else {
+            var results;
+            const entries = Object.entries(data);
+
+            //Checks for first and last name filter present within each Filter Check
+            //Salary Filter Check
+            if(state.salary === true){
+              if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
+            }
+            //DOB Filter Check
+            else if(state.dob === true){
+              if (state.f_name === true && checkRole(entries) === true && checkDate(entries)){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true && checkDate(entries))
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
+            }
+            //Default
+            else{
+              if (state.f_name === true && checkRole(entries) === true){
+                results = results || data.f_name.toLowerCase().includes(props.input);
+              }
+              if (state.l_name === true && checkRole(entries) === true)
+              {
+                results = results || data.l_name.toLowerCase().includes(props.input);
+              }
+            }
+            return results;
+        }
+    })
+
+    let finalList;
+    let topEarners = getTopSalaries(filteredData);
+    
+    //Checks for whether Earnings By Role toggle is enabled and outputs the appropriate results
+    //Earnings By Role enabled
+    if(filteredData.length && roles.includes('Earnings')){
+      finalList = filteredData.sort((a,b) => b.salary - a.salary).map((item) => (
+          <li key={item.id}>
+            {topEarners.includes(item.salary)? (
+              <h4>{item.role} Earnings</h4>
+            ): null}
+            <Stack direction="row" spacing={1}>
+              <Chip label={item.role} color="secondary"/>
+              <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
+              <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
+              <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
+              {topEarners.includes(item.salary)? (
+              <Chip label="Top Earner" color="warning"/>
+            ): null}
+            </Stack>
+          </li>
+      ))}
+    //Earnings By Role disabled
+    else if(filteredData.length){
+      finalList = filteredData.map((item) => (
+        <li key={item.id}>
+          <Stack direction="row" spacing={1}>
+            <Chip label={item.role} color="secondary"/>
+            <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
+            <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
+            <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
+          </Stack>
+        </li>
+    ))}
+    //Search Criteria yielded no results
+    else{
+      finalList = <h4>No results found</h4>;
+    }
+    return (
+        <ul>
+            {finalList}
+        </ul>
+    )
+  }
+
   //Main output of application
   return (
     <ThemeProvider theme={theme}>
@@ -298,85 +436,6 @@ function App() {
       </div>
     </ThemeProvider>
   );
-
-  //Checks for all filters before outputting filtered data 
-  function List(props) {
-    const filteredData = data.filter((data) => {
-        if (props.input === '') {
-            return data;
-        }
-        else {
-            var results;
-
-            const entries = Object.entries(data);
-            checkRole(entries);
-            //Checks for first and last name filter present within each Filter Check
-            //Salary Filter Check
-            if(state.salary === true){
-              if (state.f_name === true && checkRole(entries) === true && data.salary >= salary){
-                results = results || data.f_name.toLowerCase().includes(props.input);
-              }
-              if (state.l_name === true && checkRole(entries) === true && data.salary >= salary)
-              {
-                results = results || data.l_name.toLowerCase().includes(props.input);
-              }
-            }
-            //DOB Filter Check
-            else if(state.dob === true){
-              if (state.f_name === true && checkRole(entries) === true && checkDate(entries)){
-                results = results || data.f_name.toLowerCase().includes(props.input);
-              }
-              if (state.l_name === true && checkRole(entries) === true && checkDate(entries))
-              {
-                results = results || data.l_name.toLowerCase().includes(props.input);
-              }
-            }
-            //Default
-            else{
-              if (state.f_name === true && checkRole(entries) === true){
-                results = results || data.f_name.toLowerCase().includes(props.input);
-              }
-              if (state.l_name === true && checkRole(entries) === true)
-              {
-                results = results || data.l_name.toLowerCase().includes(props.input);
-              }
-            }
-            return results;
-        }
-    })
-
-    let finalList;
-    if(filteredData.length && roles.includes('Earnings')){
-      finalList = filteredData.sort((a,b) => b.salary - a.salary).map((item) => (
-        <li key={item.id}>
-          <Stack direction="row" spacing={1}>
-            <Chip label={item.role} color="secondary"/>
-            <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
-            <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
-            <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
-          </Stack>
-        </li>
-      ))}
-    else if(filteredData.length){
-      finalList = filteredData.map((item) => (
-        <li key={item.id}>
-          <Stack direction="row" spacing={1}>
-            <Chip label={item.role} color="secondary"/>
-            <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
-            <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
-            <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
-          </Stack>
-        </li>
-    ))}
-    else{
-      finalList = <li>No results found.</li>
-    }
-    return (
-        <ul>
-            {finalList}
-        </ul>
-    )
-  }
 }
 
 export default App;

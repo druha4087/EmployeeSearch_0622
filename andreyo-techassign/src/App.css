@@ -16,6 +16,10 @@ h1 {
   color: #b9fbc0;
 }
 
+h4 {
+  font-family: 'Josefin Sans';
+}
+
 .card {
   padding: 1rem;
   margin-top: 1rem;
