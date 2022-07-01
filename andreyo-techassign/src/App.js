@@ -1,6 +1,7 @@
 import { React, useState, Component } from "react";
 import { TextField, Button, Tooltip, Box, Typography, Modal, Switch, FormControl, FormGroup, FormControlLabel, ToggleButton, ToggleButtonGroup, Card, Chip, Stack, MenuItem } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -94,12 +95,12 @@ function App() {
   //Hook for search bar input text 
   const [inputText, setInputText] = useState("");
 
-  //Hook for state of modal
-  const [open, setOpen] = useState(false);
+  //Hook for state of filter modal
+  const [openFilter, setFilterOpen] = useState(false);
 
-  //Hooks for opening and closing modal
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  //Hooks for opening and closing filter modal
+  const handleFilterOpen = () => setFilterOpen(true);
+  const handleFilterClose = () => setFilterOpen(false);
 
   //Hook for role filters
   const [roles, setRoles] = useState(() => ['Manager', 'Employee', 'Trainee']);
@@ -248,7 +249,7 @@ function App() {
               {/* Filter Toggle Group */}
               <ToggleButtonGroup sx={groupStyle} value={roles} onChange={roleToggle} aria-label="text formatting">
                 <Tooltip title="Filter" arrow>
-                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleOpen}><FilterListIcon/></Button>
+                  <Button sx={buttonStyle} variant="outlined" color="primary" onClick={handleFilterOpen}><FilterListIcon/></Button>
                 </Tooltip>
                 <ToggleButton sx={buttonStyle} color="primary" id="manager-toggle" value="Manager" aria-label="Manager">
                   Manager
@@ -259,11 +260,16 @@ function App() {
                 <ToggleButton sx={buttonStyle} color="primary" id="trainee-toggle" value="Trainee" aria-label="Trainee">
                   Trainee
                 </ToggleButton>
+                <ToggleButton sx={buttonStyle} color="primary" id="earnings-toggle" value="Earnings" aria-label="Earnings">
+                  <Tooltip title="Earnings by Role" arrow>
+                    <ShowChartIcon/>
+                  </Tooltip>
+                </ToggleButton>
               </ToggleButtonGroup>
           </Card>
         
           {/* Filter Modal */}
-          <Modal open={open} onClose={handleClose} aria-labelledby="title" aria-describedby="description">
+          <Modal open={openFilter} onClose={handleFilterClose} aria-labelledby="title" aria-describedby="description">
             <Box sx={modalStyle} style={{backgroundColor: "#4a5e6d"}}>
               <FormControl component="fieldset" variant="standard">
                 <Typography variant="h6" component="h2" color="#b9fbc0">Search By Filter</Typography>
@@ -281,7 +287,7 @@ function App() {
                   {/* Birthdate Filter Toggle */}
                   <DateSelect/>
                 </FormGroup>
-                <Button style={{margin: "10px"}} variant="outlined" color="primary" onClick={handleClose}>Confirm</Button>
+                <Button style={{margin: "10px"}} variant="outlined" color="primary" onClick={handleFilterClose}>Confirm</Button>
               </FormControl>
             </Box>
           </Modal>
@@ -338,18 +344,36 @@ function App() {
             return results;
         }
     })
+
+    let finalList;
+    if(filteredData.length && roles.includes('Earnings')){
+      finalList = filteredData.sort((a,b) => b.salary - a.salary).map((item) => (
+        <li key={item.id}>
+          <Stack direction="row" spacing={1}>
+            <Chip label={item.role} color="secondary"/>
+            <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
+            <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
+            <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
+          </Stack>
+        </li>
+      ))}
+    else if(filteredData.length){
+      finalList = filteredData.map((item) => (
+        <li key={item.id}>
+          <Stack direction="row" spacing={1}>
+            <Chip label={item.role} color="secondary"/>
+            <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
+            <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
+            <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
+          </Stack>
+        </li>
+    ))}
+    else{
+      finalList = <li>No results found.</li>
+    }
     return (
         <ul>
-            {filteredData.map((item) => (
-                <li key={item.id}>
-                  <Stack direction="row" spacing={1}>
-                    <Chip label={item.role} color="secondary"/>
-                    <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
-                    <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
-                    <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
-                  </Stack>
-                </li>
-            ))}
+            {finalList}
         </ul>
     )
   }
