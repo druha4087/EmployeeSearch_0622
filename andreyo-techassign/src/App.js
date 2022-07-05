@@ -5,6 +5,8 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import BusinessIcon from '@mui/icons-material/Business';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -278,23 +280,80 @@ function App() {
     return top;
   }
 
-  function orgStruct() {
+  //Creates an array with employees organized in the organizational structure
+  function orgStruct(props) {
     var parentChildArr = []
-    for (let i = 0; i < data.length; i++) {
-      if(data[i].report_line[0] !== ''){
-        parentChildArr[i] = {};
-        parentChildArr[i] = data[i];
-        parentChildArr[i].children = {};
-        for (let j = 0; j < data[i].report_line.length; j++) {
-          for (let k = 0; k < data.length; k++) {
-            if(data[i].report_line[j] === data[k].empl_id){
-              parentChildArr[i].children[k] = data[k];
+    for (let i = 0; i < props.length; i++) {
+      if(props[i].report_line[0] !== ''){
+        parentChildArr[i] = [];
+        parentChildArr[i] = props[i];
+        parentChildArr[i].children = [];
+        for (let j = 0; j < props[i].report_line.length; j++) {
+          for (let k = 0; k < props.length; k++) {
+            if(props[i].report_line[j] === props[k].empl_id){
+              parentChildArr[i].children[k] = props[k];
             }
           }
         }
       }
     }
-    // console.log(parentChildArr)
+    return parentChildArr;
+  }
+
+
+  //Outputs data in the organizational structure hierarchy
+  //Bug: outputs duplicate employees and incorrect search results
+  function nestedList(props){
+    const output = orgStruct(props);
+
+    return (
+      <div>
+        {output?.map((parent, index) => {
+          return (
+            <li key={index}>
+              <Stack direction="row" spacing={1}>
+                <Chip label={parent.role} color="secondary"/>
+                <Chip icon={<AccountCircleIcon />} label={"["+parent.empl_id+"] "+parent.f_name+" "+parent.l_name} color="primary"/>
+                <Chip icon={<CalendarMonthIcon />} label={parent.dob} color="secondary" variant="outlined"/>
+                <Chip icon={<AttachMoneyIcon />} label={"R"+parent.salary} color="error" variant="outlined"/>
+              </Stack>
+              {parent.children?.map((child, index) => {
+                return (
+                  <ul>
+                  <li key={index}>
+                    <Stack direction="row" spacing={1}>
+                    <ArrowForwardIosIcon fontSize="small"/>
+                      <Chip label={child.role} color="secondary"/>
+                      <Chip icon={<AccountCircleIcon />} label={"["+child.empl_id+"] "+child.f_name+" "+child.l_name} color="primary"/>
+                      <Chip icon={<CalendarMonthIcon />} label={child.dob} color="secondary" variant="outlined"/>
+                      <Chip icon={<AttachMoneyIcon />} label={"R"+child.salary} color="error" variant="outlined"/>
+                    </Stack>
+                    {child.children?.map((g_child, index) => {
+                      return (
+                        <ul>
+                        <li key={index}>
+                          <Stack direction="row" spacing={1}>
+                          <ArrowForwardIosIcon fontSize="small"/>
+                            <Chip label={g_child.role} color="secondary"/>
+                            <Chip icon={<AccountCircleIcon />} label={"["+g_child.empl_id+"] "+g_child.f_name+" "+g_child.l_name} color="primary"/>
+                            <Chip icon={<CalendarMonthIcon />} label={g_child.dob} color="secondary" variant="outlined"/>
+                            <Chip icon={<AttachMoneyIcon />} label={"R"+g_child.salary} color="error" variant="outlined"/>
+                          </Stack>
+                        </li>
+                        </ul>
+                      );
+                    })}
+                    
+                  </li>
+                  </ul>
+                );
+              })}
+
+            </li>
+          );
+        })}
+      </div>
+    );
   }
   
   //Checks for all filters before outputting filtered data 
@@ -351,9 +410,8 @@ function App() {
 
     let finalList;
     let topEarners = getTopSalaries(filteredData);
-    orgStruct();
     
-    //Checks for whether Earnings By Role toggle is enabled and outputs the appropriate results
+    //Checks for which toggle is enabled and outputs the appropriate results
     //Earnings By Role enabled
     if(filteredData.length && roles.includes('Earnings')){
       finalList = filteredData.sort((a,b) => b.salary - a.salary).map((item) => (
@@ -372,6 +430,10 @@ function App() {
             </Stack>
           </li>
       ))}
+      //Organisational Structure enabled
+    else if(filteredData.length && roles.includes('Structure')){
+      finalList = nestedList(filteredData)
+    }
     //Earnings By Role disabled
     else if(filteredData.length){
       finalList = filteredData.map((item) => (
@@ -399,7 +461,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="wrapper">
-          <Card className="card" style={{backgroundColor: "#4a5e6d", width: 400}}>
+          <Card className="card" style={{backgroundColor: "#4a5e6d", width: 500}}>
             <h1>Employee Search</h1>
               {/* Search bar */}
               <TextField onChange={inputHandler} variant="outlined" fullWidth label="Search" color="primary"/>
@@ -420,6 +482,11 @@ function App() {
                 <ToggleButton sx={buttonStyle} color="primary" id="earnings-toggle" value="Earnings" aria-label="Earnings">
                   <Tooltip title="Earnings by Role" arrow>
                     <ShowChartIcon/>
+                  </Tooltip>
+                </ToggleButton>
+                <ToggleButton sx={buttonStyle} color="primary" id="struct-toggle" value="Structure" aria-label="Structure">
+                  <Tooltip title="Organizational Structure" arrow>
+                    <BusinessIcon/>
                   </Tooltip>
                 </ToggleButton>
               </ToggleButtonGroup>
