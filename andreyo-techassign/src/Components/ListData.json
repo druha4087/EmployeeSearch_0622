@@ -16,7 +16,7 @@
     "dob": "1998-08-01",
     "salary": 70000,
     "role": "Employee",
-    "report_line": []
+    "report_line": [""]
 }, {
     "id":3,
     "empl_id": "M02",
@@ -43,7 +43,7 @@
     "dob": "1999-07-23",
     "salary": 35000,
     "role": "Trainee",
-    "report_line": []
+    "report_line": [""]
 }, {
     "id":6,
     "empl_id": "T02",
@@ -52,7 +52,7 @@
     "dob": "2001-09-21",
     "salary": 37000,
     "role": "Trainee",
-    "report_line": []
+    "report_line": [""]
 }, {
     "id":7,
     "empl_id": "T03",
@@ -61,7 +61,7 @@
     "dob": "2000-08-08",
     "salary": 38500,
     "role": "Trainee",
-    "report_line": []
+    "report_line": [""]
 }, {
     "id":8,
     "empl_id": "E05",

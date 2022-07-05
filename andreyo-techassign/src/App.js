@@ -278,6 +278,24 @@ function App() {
     return top;
   }
 
+  function orgStruct() {
+    var parentChildArr = []
+    for (let i = 0; i < data.length; i++) {
+      if(data[i].report_line[0] !== ''){
+        parentChildArr[i] = {};
+        parentChildArr[i] = data[i];
+        parentChildArr[i].children = {};
+        for (let j = 0; j < data[i].report_line.length; j++) {
+          for (let k = 0; k < data.length; k++) {
+            if(data[i].report_line[j] === data[k].empl_id){
+              parentChildArr[i].children[k] = data[k];
+            }
+          }
+        }
+      }
+    }
+    // console.log(parentChildArr)
+  }
   
   //Checks for all filters before outputting filtered data 
   function List(props) {
@@ -333,6 +351,7 @@ function App() {
 
     let finalList;
     let topEarners = getTopSalaries(filteredData);
+    orgStruct();
     
     //Checks for whether Earnings By Role toggle is enabled and outputs the appropriate results
     //Earnings By Role enabled
