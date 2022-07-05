@@ -13,6 +13,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from "./Components/ListData.json"
 import "./App.css";
+import { color } from "@mui/system";
 
 function App() {
 
@@ -312,7 +313,9 @@ function App() {
           return (
             <li key={index}>
               <Stack direction="row" spacing={1}>
-                <Chip label={parent.role} color="secondary"/>
+                <Chip label={parent.role} style={parent.empl_id.startsWith("M")?
+                {backgroundColor:"#4a5e6d", color:"white"} : {backgroundColor:"#768ea2", color:"white"}}/>
+
                 <Chip icon={<AccountCircleIcon />} label={"["+parent.empl_id+"] "+parent.f_name+" "+parent.l_name} color="primary"/>
                 <Chip icon={<CalendarMonthIcon />} label={parent.dob} color="secondary" variant="outlined"/>
                 <Chip icon={<AttachMoneyIcon />} label={"R"+parent.salary} color="error" variant="outlined"/>
@@ -323,7 +326,9 @@ function App() {
                   <li key={index}>
                     <Stack direction="row" spacing={1}>
                     <ArrowForwardIosIcon fontSize="small"/>
-                      <Chip label={child.role} color="secondary"/>
+                      <Chip label={child.role} style={parent.empl_id.startsWith("E")?
+                      {backgroundColor:"#b3c0cb", color:"black"} : {backgroundColor:"#768ea2", color:"white"}}/>
+
                       <Chip icon={<AccountCircleIcon />} label={"["+child.empl_id+"] "+child.f_name+" "+child.l_name} color="primary"/>
                       <Chip icon={<CalendarMonthIcon />} label={child.dob} color="secondary" variant="outlined"/>
                       <Chip icon={<AttachMoneyIcon />} label={"R"+child.salary} color="error" variant="outlined"/>
@@ -334,7 +339,7 @@ function App() {
                         <li key={index}>
                           <Stack direction="row" spacing={1}>
                           <ArrowForwardIosIcon fontSize="small"/>
-                            <Chip label={g_child.role} color="secondary"/>
+                            <Chip label={g_child.role} style={{backgroundColor:"#b3c0cb", color:"black"}}/>
                             <Chip icon={<AccountCircleIcon />} label={"["+g_child.empl_id+"] "+g_child.f_name+" "+g_child.l_name} color="primary"/>
                             <Chip icon={<CalendarMonthIcon />} label={g_child.dob} color="secondary" variant="outlined"/>
                             <Chip icon={<AttachMoneyIcon />} label={"R"+g_child.salary} color="error" variant="outlined"/>
@@ -420,7 +425,11 @@ function App() {
               <h4>{item.role} Earnings</h4>
             ): null}
             <Stack direction="row" spacing={1}>
-              <Chip label={item.role} color="secondary"/>
+              <Chip label={item.role} 
+              style={item.empl_id.startsWith("M")? 
+              {backgroundColor:"#4a5e6d", color:"white"} : (item.empl_id.startsWith("E")?
+              {backgroundColor:"#768ea2", color:"white"} : {backgroundColor:"#b3c0cb", color:"black"})}/>
+
               <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
               <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
               <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
@@ -439,7 +448,10 @@ function App() {
       finalList = filteredData.map((item) => (
         <li key={item.id}>
           <Stack direction="row" spacing={1}>
-            <Chip label={item.role} color="secondary"/>
+            <Chip label={item.role} style={item.empl_id.startsWith("M")? 
+              {backgroundColor:"#4a5e6d", color:"white"} : (item.empl_id.startsWith("E")?
+              {backgroundColor:"#768ea2", color:"white"} : {backgroundColor:"#b3c0cb", color:"black"})}/>
+
             <Chip icon={<AccountCircleIcon />} label={"["+item.empl_id+"] "+item.f_name+" "+item.l_name} color="primary"/>
             <Chip icon={<CalendarMonthIcon />} label={item.dob} color="secondary" variant="outlined"/>
             <Chip icon={<AttachMoneyIcon />} label={"R"+item.salary} color="error" variant="outlined"/>
