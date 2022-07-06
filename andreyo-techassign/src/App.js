@@ -13,7 +13,6 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from "./Components/ListData.json"
 import "./App.css";
-import { color } from "@mui/system";
 
 function App() {
 
@@ -303,7 +302,7 @@ function App() {
 
 
   //Outputs data in the organizational structure hierarchy
-  //Bug: outputs duplicate employees and incorrect search results
+  //Bug: outputs incorrect search results
   function nestedList(props){
     const output = orgStruct(props);
 
@@ -439,7 +438,7 @@ function App() {
             </Stack>
           </li>
       ))}
-      //Organisational Structure enabled
+    //Organisational Structure enabled
     else if(filteredData.length && roles.includes('Structure')){
       finalList = nestedList(filteredData)
     }
